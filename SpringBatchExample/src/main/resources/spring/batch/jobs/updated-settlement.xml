@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+  http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+  http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+  ">
+	<!-- This is to demo Skip Line Tasklet -->
+
+	<import resource="../config/context.xml" />
+	<!--policy -->
+	<bean id="simplePolicy"
+		class="com.info.batch.policy.BlankLineRecordSeparatorPolicy"></bean>
+	<bean id="skipPolicy"
+		class="com.info.batch.policy.CustomSkipPolicy"></bean>
+	<!--listener -->
+	<bean id="settlementReadStepListener"
+		class="com.info.batch.listener.CustomReadStepListener"></bean>
+		
+		<bean id="jobExecutionListener" class="com.info.batch.listener.CustomJobExecutionListener">
+		<!-- <property name="fileName" value="SuccessFile.txt"></property> -->
+		</bean>
+
+	<bean id="customItemWriterListener"
+		class="com.info.batch.listener.CustomItemWriterListener">
+	</bean>
+
+
+<bean id="skiplistener" class="com.info.batch.listener.CustomSkipListener"></bean>
+
+	<job id="settlement"
+		xmlns="http://www.springframework.org/schema/batch">
+		<step id="stepSkipLineId" next="stepReadFileId">
+			<tasklet ref="exampleReadParam" />
+		</step>
+
+		<step id="stepReadFileId"
+			xmlns="http://www.springframework.org/schema/batch">
+			<tasklet>
+				<chunk reader="exampleFileSkipLineReader"
+					processor="settlementitemProcessor" writer="settlementItemWriter"
+					skip-policy="skipPolicy" commit-interval="1">
+					
+				</chunk>
+			</tasklet>
+
+			<listeners>
+				<!-- <listener ref="exampleSkipLineListener" /> -->
+                 <listener ref="jobExecutionListener"></listener>
+				<listener ref="settlementReadStepListener" />
+				<listener ref="customItemWriterListener" />
+				<listener ref="skiplistener"></listener>
+				
+
+			</listeners>
+
+		</step>
+	</job>
+
+
+	<!-- bean Level -->
+
+	<bean id="exampleReadParam"
+		class="com.info.batch.tasklet.ExampleReadParamTasklet" scope="step" />
+
+	<bean id="exampleFileSkipLineReader"
+		class="org.springframework.batch.item.file.FlatFileItemReader"
+		scope="step">
+		
+		<property name="resource"
+			value="classpath:csv/input/txn-visa2.txt" />
+		<!-- <property name="resource" value="classpath:csv/input/txn-visa1.txt" 
+			/> -->
+		<!-- <property name="linesToSkip" value="#{stepExecutionContext['linesToSkip']}" 
+			/> -->
+		<property name="linesToSkip" value="11" />
+
+		<property name="recordSeparatorPolicy" ref="simplePolicy"></property>
+		<!-- <property name="skippedLinesCallback"> <bean id="customLineCallbackHandler" 
+			class="com.info.batch.lines.CustomLineCallbackHandler"></bean> </property> -->
+		<property name="lineMapper">
+			<bean
+				class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer">
+					<!-- <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"> 
+						<property name="names" value="id,name" /> </bean> -->
+
+					<bean
+						class="org.springframework.batch.item.file.transform.FixedLengthTokenizer">
+						<property name="names"
+							value="batchName, date,time,cardNo,rrn,TxnNo,issuedId,transactionType,processingCode,entMode,reasonCode, cnSTP,responseCode,txnAmt,settlementAmt" />
+						<property name="columns"
+							value="1-5,6-11,12-20,21-40,41-53,54-60,61-72,73-77,78-84,85-88,89-93,94-97,98-104,105-124,125-133" />
+					</bean>
+				</property>
+				<!-- <property name="fieldSetMapper"> map to an object <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper"> 
+					<property name="prototypeBeanName" value="exampleBig5EncodeMapper" /> </bean> 
+					</property> -->
+				<property name="fieldSetMapper">
+					<bean class="com.journaldev.spring.mapper.SettlementMapper" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="exampleSkipLineListener"
+		class="com.info.batch.listener.ExampleSkipLineListener" scope="step" />
+
+
+	<!--Processor -->
+	<bean id="settlementitemProcessor"
+		class="com.info.batch.processor.SettlementItemProcessor" scope="step" />
+
+	<!-- Writer -->
+	<bean id="settlementItemWriter"
+		class="com.info.batch.writer.SettlementItemWriter" scope="step" />
+
+</beans>

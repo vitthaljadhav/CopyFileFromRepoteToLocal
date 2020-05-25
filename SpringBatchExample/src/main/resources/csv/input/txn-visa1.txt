@@ -1,0 +1,16 @@
+REPORT ID: SMS601C                                 VISANET INTEGRATED PAYMENT SYSTEM                 PAGE NUMBER         :        3 
+ FUNDS XFR: 1000119233 NIBL-INTL1                       SINGLECONNECT / VISA                          ONLINE SETTLMNT DATE:  22MAR20 
+ PROCESSOR: 4056360004 NEPAL INVESTMENT BANK LIMI    ACQUIRER TRANSACTION DETAIL                      REPORT DATE         :  22MAR20 
+ AFFILIATE: 4056360002 NEPAL INVESTMENT BANK LIMI        BY CARDHOLDER NUMBER                         REPORT TIME         : 10:53:56 
+ SRE      : 1000119334 NIBL-ATM-INTL4                                                                 VSS PROCESSING DATE :  22MAR20 
+                                                                                                                                     
+ ----------------------------------------------------------------------------------------------------------------------------------- 
+ BAT XMIT(GMT)/LOCL                     RETRIEVAL    TRACE  ISSUER ID/  TRAN PROCSS ENT REAS CN/ RSP  --TRANSACTION--   SETTLEMENT   
+ NUM DATE  TIME     CARD NUMBER         REF NUMBER   NUMBER TRMNL/NAME  TYPE CODE   MOD CODE STP CD        AMOUNT CUR   AMOUNT (USD) 
+ ----------------------------------------------------------------------------------------------------------------------------------- 
+                                                                                                                                     
+  46 22MAR 08:44:11 4543131630117827    008208838998 838998 700343      0200 012000 051      00  00     25,500.00 NPR       213.36CR 
+                    CA ID: 0039TM01  405635999999           25/NIBL-THAMEL              /NP  0000                  FPI: 8C0          
+                                                     ATC: 00463                     CI: 1                                            
+                    TR ID: 580082314537697                                                     SCHG:       500.00                    
+     FEE JURIS: VISA INTERNATIONAL       ROUTING: 1 A.P.      -E.U.            FEE LEVEL: ATM AF                          0.313770CR 

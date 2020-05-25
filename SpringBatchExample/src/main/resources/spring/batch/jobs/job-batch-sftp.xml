@@ -1,0 +1,20 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	">
+	<import resource="../config/context.xml" />
+	<batch:job id="sftpjob">
+		<batch:step id="step1">
+			<batch:tasklet ref="sftpTaskLet" />
+		</batch:step>
+	</batch:job>
+
+	<!--Processor -->
+	<bean id="sftpTaskLet"
+		class="com.info.batch.tasklet.SftpTasklet"></bean>
+
+</beans>
